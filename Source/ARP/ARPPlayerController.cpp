@@ -5,6 +5,7 @@
 #include "AI/Navigation/NavigationSystem.h"
 #include "Runtime/Engine/Classes/Components/DecalComponent.h"
 #include "Kismet/HeadMountedDisplayFunctionLibrary.h"
+#include "Components/ARPCombatComponent.h"
 #include "ARPCharacter.h"
 
 AARPPlayerController::AARPPlayerController()
@@ -20,6 +21,19 @@ void AARPPlayerController::PlayerTick(float DeltaTime)
 	// keep updating the destination every tick while desired
 	if (bMoveToMouseCursor)
 	{
+
+		APawn* Pawn = GetPawn();
+		if (Pawn)
+		{
+			UARPCombatComponent* CombatComp = Pawn->FindComponentByClass<UARPCombatComponent>();
+			if (CombatComp)
+			{
+				int effectId = rand() % 3;
+				CombatComp->ApplyEffect(effectId);
+			}
+		}
+
+		bMoveToMouseCursor = false;
 		MoveToMouseCursor();
 	}
 }
